@@ -1,0 +1,41 @@
+[project]
+name = "opennpu"
+version = "0.1.0"
+description = "Educational NPU built from scratch on a Cyclone II FPGA, plus a custom high-level kernel language."
+requires-python = ">=3.10"
+dependencies = [
+    # Schematic viewing: pip-installable Yosys (no system install needed).
+    # Use it to turn any .v file into a readable RTL diagram:
+    #   yowasp-yosys -p "read_verilog file.v; hierarchy -top mod; proc; opt_clean; show -format dot -prefix out"
+    #   dot -Tsvg out.dot -o out.svg
+    "yowasp-yosys>=0.66",
+
+    # Python-based testbenches instead of C++. Lets you write hardware
+    # tests as normal Python (async/await style) driving a real simulator
+    # (Verilator or Icarus Verilog) underneath. Good alternative to
+    # tb_*.cpp once you get tired of recompiling C++ for every test.
+    "cocotb>=2.0",
+
+    # Read/write VCD waveform files (the standard "signals over time"
+    # dump format) directly in Python, e.g. to build custom plots or
+    # sanity-check specific signals from a script instead of opening
+    # GTKWave every time.
+    "pyvcd>=0.4",
+
+    # Render clean timing/waveform diagrams (JSON -> SVG), handy for
+    # documenting how a signal is supposed to behave, or for including
+    # a nice diagram in the project README/glossary.
+    "wavedrom>=2.0",
+]
+
+[project.optional-dependencies]
+# Only needed if you ever want to try describing hardware directly in
+# Python instead of Verilog (not required for this project, but good to
+# know it exists since it's the closest thing to "Verilog in Python").
+explore = [
+    "amaranth>=0.5",
+]
+
+[tool.uv]
+# If you use `uv` (fast pip/venv alternative) this section is picked up
+# automatically; otherwise it's harmless with plain pip/venv.
